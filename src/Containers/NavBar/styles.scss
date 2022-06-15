@@ -1,0 +1,80 @@
+@import 'utils.scss';
+
+// *****************
+// -- NavBar -------
+// *****************
+.NavBar{
+  width: 28rem;
+  background: rgb(255, 255, 255);
+  border-right: .3rem solid rgba(0,0,0,.2);
+  height: 100vh;
+}
+
+.NavBar_Inner{
+  @extend .pageTop;
+  @extend .pageBottom;
+}
+
+// *****************
+// -- NavBar Logo --
+// *****************
+.NavBar_Logo{
+  width: 100%;
+  margin-bottom: 6rem;
+
+  // Image
+  & img{
+    display: block;
+    width: 20rem;
+    margin: 0 auto;
+  }
+}
+
+
+// *****************
+// -- NavBar Link --
+// *****************
+.NavBar_Link{
+  @extend .blinkTransition;
+  display: flex;
+  margin: 1rem 0;
+  width: calc(100% - 2.05rem);
+  padding: 1rem;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align: center;
+  border-right: .35rem solid rgba(0, 0, 0, 0);
+  &.--active{
+    border-right: .35rem solid $activeColor;
+  }
+
+  // -- SVG
+  & svg{
+    @extend .verticallyCenter;
+    @extend .blinkTransition;
+    width: 3rem;
+    height: 3rem;
+    margin-left: 2rem;
+    margin-right: 2.5rem;
+    color: $fontColor;
+  }
+  &:hover svg{
+    color: $fontColor-Strong;
+  }
+  &.--active svg{
+    color: $activeColor;
+  }
+
+  // -- Span
+  & span{
+    @extend .verticallyCenter;
+    @extend .blinkTransition;
+  }
+  &:hover span, &.--active span{
+    color: $fontColor-Strong;
+  }
+
+}
+
+
+

@@ -1,0 +1,91 @@
+Assets
+	- Images (That are used globably)
+	- Youreka Logo
+	- Fonts.woff2
+
+Components
+	- Loader
+		- index.tsx
+		- style.css
+	- Popup/Alert
+		- index.tsx
+		- style.css
+	- SearchBar
+		- index.tsx
+			(- Runs provided callback onkeypress Routine)
+		- style.css
+	- Notification
+		- index.tsx
+		- style.css
+
+
+Containers
+	- App
+		- index.tsx
+			(- Combines the NavBar & Page Together
+			 - Recieves a Prop To Know Which Page To Render)  
+		- styles.scss
+
+	- NavBar (the youreka logo bar)
+		- index.tsx
+			(- Logo
+			- Nav List
+			- Profile Logout
+			- Hamburger Menu)
+		- styles.scss
+
+
+	- Pages
+	
+		- Components
+			- TitleBar
+				- index.tsx
+					(- Combine Page Title,
+					 - <Searchbar>
+					 - & <Notification>)
+				- <SearchBar>
+				- <Notification>
+				- styles.scss
+	
+		- AccountsListPage
+			- index.tsx
+				(- Create The State _XHR Data
+				 - Provide Methods To Update The State
+				 - TitleBar
+				 - List)
+			- styles.scss
+			- List
+				- index.tsx
+				- styles.scss
+	
+		- AnalyiticsPage
+			- index.tsx
+				(- TitleBar 
+				 - show dummy analyitics)
+			- styles.scss
+
+		- ClientProfilePage
+			- ClientTitleCard
+				- index.tsx
+					(- Recieves Client Object as prop
+				 	 - Displays Client Name/website/account #
+					 - Displays in 'tiles' rating/upsell)
+				- styles.scss
+			- ClientContactCard
+				- index.tsx
+					(- Recieves Contact Object as prop
+					 - Displays Contact Info>
+				- styles.scss
+			- Notes
+				- index.tsx
+					(- Display empty text area input)
+				- styles.scss
+
+Utils
+	- Transitions
+	- Search/Filter Methods
+
+Services (3rd party API calls)
+	- Updating Client Notes
+	- Error Routing
+	- Mock API (provided json data)

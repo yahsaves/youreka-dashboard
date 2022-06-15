@@ -1,0 +1,101 @@
+@import 'utils.scss';
+
+// ********************
+// -- AccountsList ----
+// ********************
+.AccountsList_Properties{
+  font-size: 1.6rem;
+  display: flex;
+}
+.AccountsList_Properties.--header{
+  border-bottom: .1rem solid rgb(228, 228, 228);
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+
+
+// **************************************
+// -- AccountsList_Property (Titles) ----
+// **************************************
+.AccountsList_Property{
+  @extend .blinkTransition;
+  width: 18rem;
+  display: flex;
+  cursor: pointer;
+  padding-left: 2rem;
+  margin-right: 2rem;
+}
+.AccountsList_Property:hover{
+  color: $fontColor-Strong;
+}
+
+.AccountsList_Property.--name{
+  width: 24rem;
+}
+
+.AccountsList_Property.--annualRevenue{
+  width: 16rem;
+}
+
+.AccountsList_Property.--rating{
+  width: 12rem;
+}
+
+.AccountsList_Property.--upsellOpportunity__c{
+  width: 17rem;
+}
+
+
+.AccountsList_Icon{
+  width:  2rem;
+  height: 2rem;
+
+}
+.AccountsList_Icon svg{
+  width: 100%;
+  height: 100%;
+}
+
+// @extend .pageTop;
+// @extend .pageLeft;
+// @extend .pageRight;
+
+// **************************************
+// -- AccountsList_Property (Rows) ----
+// **************************************
+.AccountLink{
+  @extend .blinkTransition;
+  cursor: pointer;
+  padding: 1.2rem 0;
+}
+.AccountLink:hover{
+  background: rgb(220, 220, 220);
+}
+
+.AccountLink .--annualRevenue{
+  color: green;
+}
+
+.AccountsList_Item{
+  @extend .verticallyCenter;
+}
+
+.AccountsList_Card{
+  @extend .verticallyCenter;
+  width: 7rem;
+  padding: 1rem 1.5rem;
+  border-radius: 5rem;
+  color: $fontColor-Strong;
+}
+
+.AccountsList_Card.--Cold{
+  background: $cold;
+}
+
+.AccountsList_Card.--Warm{
+  background: $warm;
+}
+
+.AccountsList_Card.--Hot{
+  background: $hot;
+}
