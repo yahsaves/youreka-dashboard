@@ -34,6 +34,7 @@
   position: relative;
   background: #f5f5fb;
   width: 90%;
+  max-width: 150rem;
   margin: 0 auto;
   margin-top: 30rem;
   padding-bottom: 2.5rem;
@@ -82,7 +83,7 @@
 // *********************
 .accountProfile_Contacts{
   display: inline-block;
-  width: 26rem;
+  width: 28rem;
   padding: 1rem;
   background-color: white;
   margin-left: 3rem;
@@ -102,6 +103,18 @@
 
 .accountProfile_ContactCard{
   margin-right: 3rem;
+}
+
+.accountProfile_ContactInfo{
+  display: flex;
+  padding-top: .8rem;
+  padding-bottom: .2rem;
+  border-bottom: .1rem dotted rgb(220, 220, 220);
+  padding-right: 1rem;
+}
+
+.accountProfile_ContactDescription{
+  width: 11rem;
 }
 
 // *********************

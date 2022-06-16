@@ -15,7 +15,7 @@ import { checkOnline, reportError } from 'Services/errorHandling';
 function enhancedFetch(reqURL:string){
   return new Promise((resolve, reject) => {
 
-    fetchRequest(reqURL).then(function(accountData){
+    fetchRequest(reqURL).then(function(accountData: any){
       resolve(accountData);
     }).catch(function(){
       checkOnline().then(function(onlineStatus){ 

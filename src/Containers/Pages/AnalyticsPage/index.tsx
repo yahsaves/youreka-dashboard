@@ -25,30 +25,31 @@ function AnalyticsPage( ) {
   const [accountsLoaded, setAccountsLoaded] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   
-  // Load Account Data (Async Method)
-  useEffect(() => {    
-    getAccountData().then(function(accountRequest:any){
-      setAccounts(accountRequest.records);
-      setAccountsLoaded(true);
-    }).catch(function(onlineStatus){
-      if(onlineStatus){
-        setErrorMessage("We are currently undergoing maintence at the moment. Please check back shortly.");
-      }else{
-        setErrorMessage("It appears this device doesn't have internet connection.");
-      }
-    })
-  }, []);
+ // Load Account Data (Async Method)
+ function loadAccountData(forceOnline?: boolean){
+  setAccountsLoaded(false);
+  getAccountData(forceOnline).then(function(accountRequest:any){
+    setAccounts(accountRequest.records);
+    setAccountsLoaded(true);
+  }).catch(function(onlineStatus){
+    setAccountsLoaded(true);
+    if(onlineStatus){
+      setErrorMessage("We are currently undergoing maintence at the moment. Please check back shortly.");
+    }else{
+      setErrorMessage("It appears this device doesn't have internet connection.");
+    }
+  })
+}
+useEffect(() => { loadAccountData(); }, []);
 
   return (
     <div className='fillArea'>
       {errorMessage !== '' && <Alert message={errorMessage} />}
-      <TitleBar title='Analytics' />
-      <div className='fillArea'>
-        <Loader hide={accountsLoaded} />
-        {accountsLoaded && 
-          <RichClients accounts={accounts} />
-        }
-      </div>
+      <TitleBar title='Analytics' onRefresh={loadAccountData} />
+      <Loader hide={accountsLoaded} />
+      {accountsLoaded && 
+        <RichClients accounts={accounts} />
+      }
     </div>
   );
 }

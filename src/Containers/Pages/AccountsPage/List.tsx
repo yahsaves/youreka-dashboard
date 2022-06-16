@@ -3,14 +3,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 // -- Component Imports
 import TitleSorter from 'Containers/Pages/AccountsPage/TitleSorter';
+// -- Utility Imports
+import postMessageToWorker from 'Utils/webworker'
 
 // -- Define Interfaces
-interface AccountListProps {
-  wordFilter: string;  
-  accounts: any;
-}
 interface AccountListState {
-  name: string;  
+  name: string; 
   sortDirection: string;
 }
 let AccountPropertiesENUM = [
@@ -35,6 +33,11 @@ let sortDirectionENUM = {
   up: 'assending',
   down: 'dessending',
 }
+interface AccountListProps {
+  wordFilter: string;  
+  accounts: any;
+  updateCount: number;
+}
 
 // -- Define AccountList ---
 // *************************
@@ -45,7 +48,7 @@ let sortDirectionENUM = {
 function AccountList( props : AccountListProps ) {
 
   // Set Sorting Option
-  const [sorter, setSorter] = useState({name: 'Name', sortDirection: sortDirectionENUM.up });
+  const [sorter, setSorter] = useState({ name: 'Name', sortDirection: sortDirectionENUM.up });
   function updateSorter(newSorterName: string){
     setSorter( oldSorter => { 
       let newSorter = { name: newSorterName, sortDirection: oldSorter.sortDirection };
@@ -58,13 +61,23 @@ function AccountList( props : AccountListProps ) {
     })
   }
 
-
   // Filter & Sort Accounts
-  let filteredAccounts = filterAccounts(props.accounts, props.wordFilter);
-  sortAccounts(filteredAccounts, sorter.name);
-  if(sorter.sortDirection === sortDirectionENUM.down){
-    filteredAccounts.reverse();
+  const [displayAccounts, setDisplayAccounts] = useState(props.accounts);
+  const [filterUpdateCount, setFilterUpdateCount] = useState(0);
+
+  let updateCount = props.updateCount;
+  if(updateCount !== filterUpdateCount){
+    filterAccounts(props.accounts, props.wordFilter).then(function(filteredAccounts: any){
+      sortAccounts(filteredAccounts, sorter.name);
+      if(sorter.sortDirection === sortDirectionENUM.down){
+        filteredAccounts.reverse();
+      }
+      setDisplayAccounts(filteredAccounts);
+    });
+    setFilterUpdateCount( (oldFilterUpdateCount:number) => { return oldFilterUpdateCount + 0.5; } )
   }
+  
+  
 
   return (
     <div className="pageContainer">
@@ -74,7 +87,7 @@ function AccountList( props : AccountListProps ) {
           <div className="AccountsList_Properties --header">
             {buildSortingColumns(updateSorter, sorter)}
           </div>
-          {buildAccountRows(filteredAccounts)}
+          {buildAccountRows(displayAccounts)}
         </div>
       </div>
     </div>
@@ -106,7 +119,7 @@ function buildSortingColumns(updateSorter:any, sorter:AccountListState){
 
 /**
  * Creates Account Rows Based On The Accounts Array
- * @param pages - An Array Of Accounts
+ * @param - An Array Of Accounts
  */
  function buildAccountRows(filteredAccounts: any){
   return (
@@ -147,17 +160,46 @@ function buildSortingColumns(updateSorter:any, sorter:AccountListState){
 
 // -- Sorting Methods
 function filterAccounts(accounts: any, wordFilter: string){
-  const result = accounts.filter( (account: any) => {
-    if(account.Name.toLowerCase().includes(wordFilter.toLowerCase())){
-      return true; 
+  return new Promise((resolve, reject) => {
+
+    // Return all accounts if there is no wordFilter
+    if(wordFilter === ''){
+      const filteredAccounts: any[] = accounts.filter( (account: any) => {
+        return true;
+      });
+      resolve(filteredAccounts);
+      return;
     }
-    if(account.AccountNumber && account.AccountNumber.toLowerCase().includes(wordFilter.toLowerCase())){
-      return true; 
-    }
-    return false;
-  });
-  return result;
-}
+    
+    // -- Ask WebWorker Which Account Indexs To Keep
+    postMessageToWorker({
+      job: 'filter',
+      data: {accounts: accounts, wordFilter: wordFilter},
+      dataName: 'accounts',
+    }).then(function(indexsToKeep :any){
+      let filteredAccounts: any[] = [];
+      for(let i=0; i<indexsToKeep.length; i++){
+        let targetIndex = indexsToKeep[i];
+        filteredAccounts.push(accounts[targetIndex]);
+      }
+      resolve(filteredAccounts);
+      return;
+    });
+
+    // -- Sort Code On The Main Thread  
+    // const filteredAccounts = accounts.filter( (account: any) => {
+    //   if(account.Name.toLowerCase().includes(wordFilter.toLowerCase())){
+    //     return true; 
+    //   }
+    //   if(account.AccountNumber && account.AccountNumber.toLowerCase().includes(wordFilter.toLowerCase())){
+    //     return true; 
+    //   }
+    //   return false;
+    // });
+    // return filteredAccounts;
+
+  }); // End Promise Return
+} // End filterAccounts
 
 function sortAccounts(accounts: any, sorter: string){
   if(sorter === "Name"){

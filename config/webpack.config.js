@@ -347,7 +347,7 @@ module.exports = function (webpackEnv) {
         shouldUseSourceMap && {
           enforce: 'pre',
           exclude: /@babel(?:\/|\\{1,2})runtime/,
-          test: /\.(js|mjs|jsx|ts|tsx|css|scss)$/,
+          test: /\.(js|mjs|jsx|ts|tsx|d.ts|css|scss)$/,
           loader: require.resolve('source-map-loader'),
         },
         {
@@ -402,13 +402,13 @@ module.exports = function (webpackEnv) {
                 },
               ],
               issuer: {
-                and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
+                and: [/\.(ts|tsx|d.ts|js|jsx|md|mdx)$/],
               },
             },
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              test: /\.(js|mjs|jsx|ts|tsx|d.ts)$/,
               include: paths.appSrc,
               loader: require.resolve('babel-loader'),
               options: {
@@ -557,7 +557,7 @@ module.exports = function (webpackEnv) {
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|d.ts)$/, /\.html$/, /\.json$/],
               type: 'asset/resource',
             },
             // ** STOP ** Are you adding a new loader?
@@ -712,8 +712,8 @@ module.exports = function (webpackEnv) {
             // '../cra-template-typescript/template/src/App.tsx'
             // otherwise.
             include: [
-              { file: '../**/src/**/*.{ts,tsx}' },
-              { file: '**/src/**/*.{ts,tsx}' },
+              { file: '../**/src/**/*.{ts,tsx,d.ts}' },
+              { file: '**/src/**/*.{ts,tsx,d.ts}' },
             ],
             exclude: [
               { file: '**/src/**/__tests__/**' },
@@ -729,7 +729,7 @@ module.exports = function (webpackEnv) {
       !disableESLintPlugin &&
         new ESLintPlugin({
           // Plugin options
-          extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
+          extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'd.ts'],
           formatter: require.resolve('react-dev-utils/eslintFormatter'),
           eslintPath: require.resolve('eslint'),
           failOnError: !(isEnvDevelopment && emitErrorsAsWarnings),

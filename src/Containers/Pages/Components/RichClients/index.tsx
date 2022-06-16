@@ -39,7 +39,7 @@ function RichClients( props:any  ) {
       </div>
 
       <div className="pageComponent AccountsList">
-        <div className="pageComponent_Title">Business Partners We Need More Information For</div>
+        <div className="pageComponent_Title">Partners We Have Limited Information On</div>
         <div className="pageComponent_Content">
           {renderAccountNames(learnMoreAbout)}
         </div>

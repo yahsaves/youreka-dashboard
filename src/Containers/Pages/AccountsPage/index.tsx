@@ -14,6 +14,7 @@ import AccountProfile from 'Containers/Pages/AccountProfilePage';
 
 
 
+
 // -- Define AccountList ---
 // *************************
 /**
@@ -26,42 +27,44 @@ function AccountsPage( ) {
   const [accounts, setAccounts] = useState({});
   const [accountsLoaded, setAccountsLoaded] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  
+  const [updateCount, setUpdateCount] = useState(0);
+
   // Load Account Data (Async Method)
-  useEffect(() => {    
-    getAccountData().then(function(accountRequest:any){
+  function loadAccountData(forceOnline?: boolean){
+    setAccountsLoaded(false);
+    getAccountData(forceOnline).then(function(accountRequest:any){
       setAccounts(accountRequest.records);
       setAccountsLoaded(true);
     }).catch(function(onlineStatus){
+      setAccountsLoaded(true);
       if(onlineStatus){
         setErrorMessage("We are currently undergoing maintence at the moment. Please check back shortly.");
       }else{
         setErrorMessage("It appears this device doesn't have internet connection.");
       }
     })
-  }, []);
+    setUpdateCount( (oldUpdate:number) => { return oldUpdate + 1; } )
+  }
+  useEffect(() => { loadAccountData(); }, []);
 
   // Setup Search WordFilter Data/State
   const [wordFilter, setWordFilter] = useState('');
   function onSearch(searchQuery: string){
     setWordFilter(searchQuery);
+    setUpdateCount( (oldUpdate:number) => { return oldUpdate + 1; } )
   }
 
   return (
     <div className='fillArea'>
-
       <Routes>
         {accountsLoaded && <Route path="/profile/:userid" element={ <AccountProfile accounts={accounts} /> } />}
       </Routes>
-
       {errorMessage !== '' && <Alert message={errorMessage} />}
-      <TitleBar title='Accounts' onSearch={onSearch} />
-      <div className='fillArea'>
-        <Loader hide={accountsLoaded} />
-        {accountsLoaded && 
-          <AccountList wordFilter={wordFilter} accounts={accounts} />
-        }
-      </div>
+      <TitleBar title='Accounts' onSearch={onSearch} onRefresh={loadAccountData} />
+      <Loader hide={accountsLoaded} />
+      {accountsLoaded && 
+        <AccountList wordFilter={wordFilter} updateCount={updateCount} accounts={accounts} />
+      }
     </div>
   );
 }

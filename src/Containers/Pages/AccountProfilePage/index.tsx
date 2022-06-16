@@ -9,7 +9,6 @@ import Icon from 'Assets/icons';
 import { delayRAF } from 'Utils/helpers';
 
 
-
 // -- Define Interfaces
 interface AccountProfileProps {
   accounts: any;
@@ -65,27 +64,41 @@ export default AccountProfile;
 // -- createContactCards
 function createContactCards(account: any){
   let contacts = account.Contacts.records;
+  let desiredProperties = [
+    {
+      name: "Title",
+      description: "Title",
+    },
+    {
+      name: "Phone",
+      description: "Phone",
+    },
+    {
+      name: "Department",
+      description: "Department",
+    },
+    {
+      name: "Email",
+      description: "Email",
+    },
+  ];
 
   return (
     <>
-      {contacts.map(function(contact:any){
+      {contacts.map((contact:any) =>{
         return (
           <div key={contact.Id} className="accountProfile_Contacts">
             <div className="accountProfile_ContactDeclaration"> {contact.Name} </div>
-            
             <div className="accountProfile_ContactCards">
               <div className="accountProfile_ContactCard">
-                <div className="accountProfile_ContactTitle"> Title </div>
-                <div className="accountProfile_ContactPhone"> Phone </div>
-                <div className="accountProfile_ContactDepartment"> Department </div>
-                <div className="accountProfile_ContactEmail"> Email </div>
-              </div>
-
-              <div className="accountProfile_ContactCard">
-                <div className="accountProfile_ContactTitle"> Hr </div>
-                <div className="accountProfile_ContactPhone"> 830 412 1125 </div>
-                <div className="accountProfile_ContactDepartment"> Emergency </div>
-                <div className="accountProfile_ContactEmail"> stuff@hotmail.com </div>
+                {desiredProperties.map( (property) => {
+                  return (
+                    <div key={contact.Id+property.name} className="accountProfile_ContactInfo">
+                      <div className="accountProfile_ContactDescription">{property.description}</div>
+                      <div>{contact[property.name] ? contact[property.name] : '-'}</div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>

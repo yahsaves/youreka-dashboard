@@ -24,6 +24,10 @@
   font-weight: bold;
 }
 
+.TitleBar_Helpers{
+  display: flex;
+}
+
 // *****************
 // -- Search Bar ---
 // *****************
@@ -85,4 +89,26 @@
   }
 
  
+}
+
+
+// *****************
+// -- Icon ---------
+// *****************
+.TitleBar_Icon{
+  @extend .blinkTransition;
+  cursor: pointer;
+  padding: 0 2rem;
+  display: block;
+  width: 2.5rem;
+  height: 6rem;
+
+  & svg{
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover{
+    color: $activeColor;
+  }
 }

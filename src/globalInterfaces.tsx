@@ -8,4 +8,16 @@ interface FocusPage {
   focusPage: string;
 }
 
-export type { Page, FocusPage }
+interface Account {
+  Id: string;
+  Name: string;
+  AnnualRevenue?: number;
+  Website?: string;
+  AccountNumber?: string;
+  Rating?: string;
+  UpsellOpportunity__c?: string,
+  Contacts: any;
+}
+
+
+export type { Page, FocusPage, Account }
